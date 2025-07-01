@@ -8,23 +8,25 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('changelog_changes', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->uuid('changelog_id');
+            $table->string('name');
+            $table->string('type');
+            $table->timestamp('occurred_at')->nullable(); 
             $table->timestamps();
+
+            $table->foreign('changelog_id')->references('id')->on('changelogs')->onDelete('cascade');
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('changelog_changes');
     }
